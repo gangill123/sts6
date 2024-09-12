@@ -1,12 +1,16 @@
 package com.itwillbs.persistence;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Repository;
 
-import com.mysql.cj.x.protobuf.MysqlxNotice.SessionStateChanged.Parameter;
+import com.itwillbs.domain.MemberVO;
+
 
 
 /*
@@ -22,28 +26,122 @@ public class MemberDAOImpl implements MemberDAO {
 	
 	// 공통변수, 디비 연결 , 자원해제
 	// 디비 연결 처리(SqlSessionFactory) 객체 필요함 => 의존 관계 주입
-	@Inject
-	private SqlSessionFactory sqlFactory;
+//	@Inject
+//	private SqlSessionFactory sqlFactory;
 	
+	
+	@Inject
+	private SqlSession sqlSession; // 자동으로 연결, 자원해제, SQL실행, mybatis..
+	
+	//Mapper namespace 정보 저장
+	private static final String NAMESPACE = "com.itwillbs.mapper.MemberMapper";
 	
 	@Override
 	public String getTime() {
 		System.out.println("DAO : getTime() 실행 ");
 		
 		// 1.2 디비연결
-		SqlSession sqlSession = sqlFactory.openSession();
+		// SqlSession sqlSession = sqlFactory.openSession();
 		// 3. SQL & pstmt 객체
 		// 4. SQL 실행
 //		sqlFactory.selectOne(SQL 구문)
 //		sqlFactory.selectOne(SQL 구문 , 전달정보);
 		String result
 		  = sqlSession.selectOne("com.itwillbs.mapper.MemberMapper.getTime");
-		//= sqlSession.selectOne("select now()");		
+			// -> Mapper의 SQL 구문 id 호출
+		//= sqlSession.selectOne("select now()");
+		// -> 직접적으로 SQL호출 x 
 		// 5. 데이터 처리
 			System.out.println("결과 : "+result);
 		return result;
 	}
+	@Override
+	public void insertMember(MemberVO vo) {
+		System.out.println("DAO : 회원가입 동작 실행");
+		
+		//1.1  디비연결 -> 생략 SqlSession 객체 수행
+		//2. SQL구문 (mapper 생성)& pstmt객체(mybatis 관리)
+		//3. SQL실행
+		// com.itwillbs.mapper.MemberMapper
+		int result = sqlSession.insert(NAMESPACE+".insertMember", vo);
+		
+		System.out.println("DAO : "+result);
+		System.out.println("DAO : 회원가입 완료 ");
+		
+		
+	}
+	@Override
+	public MemberVO loginMember(MemberVO vo) {
+	System.out.println("DAO : loginMember(MemberVO vo)실행");
 	
+	// SQL 구문을  MAPPER에 생성 
+		System.out.println("DAO : mapper SQL 생성완료!");
+	// SQL 구문 실행
+		MemberVO resultVO 
+					= sqlSession.selectOne(NAMESPACE+".loginMember", vo);
+		
+		System.out.println("DAO :"+resultVO);
+		
+		
+		return resultVO;
+	}
+	@Override
+	public MemberVO loginMember(String userid, String userpw) {
+		System.out.println(" DAO : loginMember(String userid, String userpw) 실행");
+		
+		//sqlSession.selectOne(NAMESPACE + ".loginMember",userid,userpw); (x)
+		
+		//		MemberVO vo = new MemberVO();
+		//		vo.setUserid(userid);
+		//		vo.setUserpw(userpw);
+		//		
+		//		MemberVO resultVO = sqlSession.selectOne(NAMESPACE + ".loginMember",vo);
+		// => 전달받은 정보를 하나의 공통객체에 저장 => 전달할때 객체로 전달
+		// = userid(회원가입),userpw(게시판)는 하나의 객체 (resultVO)에 저장이 불가능하다고 가정
+		// -> Ex( join 구문 실행)
+		Map<String,Object>paramMap = new HashMap<String, Object>();
+		//paramMap.put ("mapper 에서 호출하는 이름:, 전달할 값):
+		paramMap.put("userid", userid);
+		paramMap.put("userpw", userpw);
+		
+		MemberVO resultVO = sqlSession.selectOne(NAMESPACE + ".loginMember",paramMap);
+		
+		
+		
+		
+		return resultVO;
+	}
 	
+	@Override
+	public MemberVO getMember(String userid) {
+		System.out.println("DAO : getMember 실행 !");
+		//mapper SQL 작성
+		
+		// SqlSession 사용 sql실행
+		
+	
+		return sqlSession.selectOne(NAMESPACE+".getMember", userid);
+	}
+	@Override
+	public int updateMember(MemberVO uvo) {
+		System.out.println("DAO : updateMember(MemberVO uvo) 실행 !");
+		// mapper -sql 작성
+		// sqlSession 사용 sql실행 (정수반환)
+		return sqlSession.update(NAMESPACE+".updateMember", uvo);
+	}
+	@Override
+	public Integer deleteMember(MemberVO dvo) {
+		// mapper -sql 작성
+				// sqlSession 사용 sql실행 ()
+		System.out.println("DAO : deleteMember(MemberVO dvo) 실행 !");
+		return sqlSession.delete(NAMESPACE+".deleteMember", dvo);
+	}
+	@Override
+	public List<MemberVO> getMemberList() {
+		System.out.println("DAO : List<MemberVO> getMemberList() 실행!");
+		// mapper -sql 작성
+		// sqlSession 사용 sql실행 ()
+		return sqlSession.selectList(NAMESPACE+".getMemberList");
+	}
 
 }
