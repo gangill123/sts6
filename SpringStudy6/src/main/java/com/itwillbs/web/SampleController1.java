@@ -39,7 +39,7 @@ public class SampleController1 {
 	// 기존MVC : 주소를 if 문으로 비교해서 동작을 처리
 	// springMVC : 메서드로 동작을 처리
 	//	@RequestMapping(value = "매핑하는 주소 ",method = 전달 방식 (get/post) )
-	// http://localhost:8088/web/doA 주소 입력
+	// http://localhost:8088/web/doA 주소  입력
 	
 	// * 메서드의 리턴 타입이 void 일때 자동으로 (주소이름과 같은)jsp 페이지를 연결
 	@RequestMapping(value = "/doA",method = RequestMethod.GET)

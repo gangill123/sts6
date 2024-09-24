@@ -28,5 +28,11 @@
 		
 		<h2>vo1 : ${vo1 }</h2>
 		
+		<hr>
+		userid : ${userid }
+		userpw : ${userpw }
+		userid : ${param.userid }
+		userpw : ${param.userpw }
+		
 </body>
 </html>
