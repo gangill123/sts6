@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService{
 	//회원 가입 동작
 	@Override
 	public void memberJoin(MemberVO vo) {
-		
+		//s
 			logger.debug("컨틀러 -> 서비스 ");
 			logger.debug("회원가입 메서드 memberjoin(moemberVO vo)실행");
 			
