@@ -61,7 +61,7 @@ public class MemberController {
 		// 전달정보 ( 파라메터  )저장
 		logger.debug("vo : "+vo);
 		
-		// DB 객체 생성 - 회원가입
+		// DB 객체 생성 - 회원가입 s
 		// MemberDAO 객체 생성 => 객체 주입
 		// mdao.insertMmember (vo) :x 
 		
