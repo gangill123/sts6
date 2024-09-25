@@ -54,7 +54,8 @@ public class MemberController {
 	@RequestMapping(value = "/join",method = RequestMethod.POST)
 	public String joinMemberPost(MemberVO vo) {
 		logger.debug("/member/joinMemberAction - > joinMemberAction() 실행");
-		//한글 인코딩 처리
+		// 한글 인코딩처리  => web.xml 필터로 처리
+	
 		
 		
 		// 전달정보 ( 파라메터  )저장
