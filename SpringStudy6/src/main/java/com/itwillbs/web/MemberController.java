@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.itwillbs.domain.MemberVO;
 import com.itwillbs.persistence.MemberDAO;
+import com.itwillbs.service.MemberService;
 
 @Controller
 @RequestMapping(value = "/member/*")
@@ -19,6 +20,10 @@ public class MemberController {
 	// 객체 주입 
 	@Inject
 	private MemberDAO mdao;
+	
+	@Inject
+	private MemberService mService;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
@@ -57,8 +62,13 @@ public class MemberController {
 		
 		// DB 객체 생성 - 회원가입
 		// MemberDAO 객체 생성 => 객체 주입
-		mdao.insertMember(vo);
+		// mdao.insertMmember (vo) :x 
+		
+		//MemberService 객체를 주입 -> 해당 동작 수행 
+		mService.memberJoin(vo);
 		logger.debug("회원가입 성공!!");
+		
+		//
 		
 		return "";
 	}
