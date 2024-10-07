@@ -8,7 +8,7 @@
   	<!-- namespace를 사용해서 mapper 파일을 찾아오는 주소 설정  -->
   	
   	<!-- 시간정보 조회  -->
-  	<select id="getTime" resultType="string">
+  	<select id="getTime" resultType="string"> 
   		select now()
   	</select>
   
